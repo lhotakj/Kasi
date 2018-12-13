@@ -1,14 +1,28 @@
+#!/usr/local/bin/python3
+
 import socket
 import sys
 import datetime
 import codecs
 import pickle
 
+
 class Client(object):
 
     def __init__(self):
         pass
 
+    @staticmethod
+    def receive_all(sock):
+        BUFF_SIZE = 4096  # 4 KiB
+        data = b''
+        while True:
+            part = sock.recv(BUFF_SIZE)
+            data += part
+            if len(part) < BUFF_SIZE:
+                # either 0 or end of data
+                break
+        return data.decode()
 
     def recvall(self):
         BUFF_SIZE = 4096  # 4 KiB

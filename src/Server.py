@@ -1,53 +1,22 @@
 import sys
 import socket
-from datetime import datetime
+from Kasi import Client
+from Kasi import Storage
 
-def recvall(sock):
-    BUFF_SIZE = 4096  # 4 KiB
-    data = b''
-    while True:
-        part = sock.recv(BUFF_SIZE)
-        data += part
-        if len(part) < BUFF_SIZE:
-            # either 0 or end of data
-            break
-    return data.decode()
-
-class Storage(object):
-
-    def __init__(self):
-        self.__data = {}
-
-    def Set(self, name, value):
-        self.__data[name] = [value, datetime.utcnow().timestamp()]
-
-    def Get(self, name):
-        if name in self.__data:
-            return self.__data[name][0]
-        return "None"
-
-    def Dump(self):
-        return self.__data
-
-
-def server_program():
+def start_server(host=None, port=5000, connections=5):
     # get the hostname
-    host = socket.gethostname()
-    port = 5000  # initiate port no above 1024
+    if not host:
+        host = socket.gethostname()
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # get the instance
     server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-
-    # look closely. The bind() function takes tuple as argument
     server_socket.bind((host, port))  # bind host address and port together
-
-    # configure how many client the server can listen simultaneously
-    server_socket.listen(5)
+    server_socket.listen(connections)
 
     sys.stderr.write('Server up and running and waiting on {port} ... \n'.format(port=str(port)))
     sys.stdout.flush()
 
-    storage = Storage()
+    storage = Storage.Storage()
 
     while True:
 
@@ -59,7 +28,7 @@ def server_program():
             sys.stdout.flush()
 
             # receive data stream.
-            data = recvall(conn)
+            data = Client.Client.receive_all(conn)
             #sys.stdout.write("Received: " + str(data).replace("\n","|") + "\n")
 
             #print(storage.Dump())
@@ -67,11 +36,11 @@ def server_program():
             #    break
 
             if data.startswith("D"):
-                conn.send(str("0\n" + str(storage.Dump())).encode())  # send data to the client
+                conn.send(str("0\n" + str(storage.dump())).encode())  # send data to the client
             elif data.startswith("S"):
                 data = data[1:]
                 lines = data.split("\n")
-                storage.Set(lines[0], lines[1])
+                storage.set(lines[0], lines[1])
                 sys.stdout.write("SET {key} \n".format(key=lines[0]))
                 sys.stdout.flush()
                 conn.send(("0\n" + data).encode())  # send data to the client
@@ -79,7 +48,7 @@ def server_program():
                 data = data[1:-1]
                 sys.stdout.write("GET {key} \n".format(key=data))
                 sys.stdout.flush()
-                r = storage.Get(data)
+                r = storage.get(data)
                 conn.send(("0\n" + r).encode())  # send data to the client
             elif data.startswith("Q"):
                 conn.send(("0\n" + data).encode())  # send data to the client
@@ -103,5 +72,5 @@ def server_program():
 
 
 if __name__ == '__main__':
-    server_program()
+    start_server()
 
