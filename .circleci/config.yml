@@ -21,7 +21,9 @@ jobs:
             pipenv run "pip install -r requirements-dev.txt"
       - run:
 #          command: pipenv run "python test/run.py"
-          command: pipenv run "python demo/start.py"
+          command: |
+           export PYTHONPATH="$PWD/code"
+           pipenv run "python demo/start.py"
 
       - store_test_results:
           path: test-results
