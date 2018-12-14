@@ -12,19 +12,21 @@ jobs:
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
       - run:
           command: |
-            sudo pip install pipenv
+            #sudo pip install pipenv
             sudo pip install --upgrade pip
-            pipenv install
-            export PIPENV_SITE_PACKAGES="~/kasi"
+            #pipenv install
+            export PYTHONPATH="$HOME/kasi"
+            pip install -r requirements-dev.txt
+            python demo/start.py
 
-      - run: 
-          command | 
-            pipenv run "pip install -r requirements-dev.txt"
-      - run:
+#      - run: 
+#          command | 
+#            pipenv run "pip install -r requirements-dev.txt"
+#    - run:
 #          command: pipenv run "python test/run.py"
-          command: |
+#          command: |
            #pwd
-           pipenv run "python demo/start.py" --site-packages
+#           pipenv run "python demo/start.py" --site-packages
 
       - store_test_results:
           path: test-reports
