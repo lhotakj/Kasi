@@ -8,7 +8,7 @@ from kasi import Storage
 def start_server(host=None, port=5000, connections=5):
     # get the hostname
     if not host:
-        host = socket.gethostname()
+        host = 'localhost'
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # get the instance
     server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -19,8 +19,8 @@ def start_server(host=None, port=5000, connections=5):
     except Exception as e:
         sys.stderr.write(str(e) + "\n")
 
-
-    sys.stderr.write('Server up and running and waiting on {port} ... \n'.format(port=str(port)))
+    sys.stdout.write('Server up and running and waiting on {host}:{port} ... \n'.format(host=host, port=str(port)))
+    sys.stdout.write('Press [Ctrl+C] to stop it.\n'.format(port=str(port)))
     sys.stdout.flush()
 
     storage = Storage.Storage()

@@ -74,7 +74,7 @@ class Client(object):
         host = self._host                           # as both code is running on same pc
         port = self._port                           # socket server port number
         self.__client_socket = socket.socket()      # instantiate
-        self.__client_socket.connect((host, port))  # connect to the server
+        self.__client_socket.connect((self._host, self._port))  # connect to the server
 
     def Close(self):
         self.__client_socket.close()  # close the connection

@@ -8,7 +8,7 @@ from kasi import Client
 if __name__ == '__main__':
 
     # instantiate the client
-    client = Client.Client()
+    client = Client.Client(host='localhost', port=5000)
 
     test_list = ['a', 'd']
     test_str_ascii = 'hi'

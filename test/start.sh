@@ -11,6 +11,8 @@ if [ -z "$1" ]
     echo "No interpreter supplied. Usage: 'start.sh /usr/bin/python3'"
     exit 1
 fi
+
+rm -f ./nohup.out
 echo "Starting server ..."
 nohup $1 ./start.py &
 
@@ -21,3 +23,7 @@ $1 ./client.py
 
 echo "Killing server $PID ..."
 kill -9 $PID
+
+echo "Server log"
+echo "----------------"
+cat ./nohup.out
