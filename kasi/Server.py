@@ -1,7 +1,7 @@
 import sys
 import socket
-from Kasi import Client
-from Kasi import Storage
+from kasi import Client
+from kasi import Storage
 
 def start_server(host=None, port=5000, connections=5):
     # get the hostname
