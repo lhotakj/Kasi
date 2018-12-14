@@ -22,7 +22,8 @@ jobs:
       - run:
 #          command: pipenv run "python test/run.py"
           command: |
-           export PYTHONPATH="$PWD/code"
+           export PYTHONPATH="~/kasi/kasi"
+           export
            pipenv run "python demo/start.py"
 
       - store_test_results:
