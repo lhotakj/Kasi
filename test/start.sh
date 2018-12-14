@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # -- usage ------------
 # start.sh <python-interpreter>
@@ -6,7 +6,7 @@
 # eg. start.sh /usr/bin/python3
 
 
-if [[ "$1" == "" ]]
+if [ "$1" == "" ]
   then
     echo "No interpreter supplied. Usage: 'start.sh /usr/bin/python3'"
     exit 1
