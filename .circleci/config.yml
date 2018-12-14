@@ -13,6 +13,9 @@ jobs:
           command: |
             sudo pip install pipenv
             pipenv install
+      - run: 
+          command | 
+            pipenv run "pip install -r requirements-dev.txt"
       - run:
           command: |
             pipenv run "python test/run.py"
