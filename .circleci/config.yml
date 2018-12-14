@@ -14,12 +14,14 @@ jobs:
           command: |
             sudo pip install pipenv
             sudo pip install --upgrade pip
-            pipenv install            
+            pipenv install
       - run: 
           command | 
             pipenv run "pip install -r requirements-dev.txt"
       - run:
-          command: pipenv run "python test/run.py"
+#          command: pipenv run "python test/run.py"
+          command: pipenv run "python demo/start.py"
+
       - store_test_results:
           path: test-results
 #      - store_artifacts:
