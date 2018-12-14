@@ -13,7 +13,7 @@ fi
 
 rm -f ./nohup.out
 echo "Starting server ..."
-nohup $1 ./start.py &
+nohup $1 ~/kasi/test/start.py &
 
 PID=$!
 echo "Server running under PID:$PID"
