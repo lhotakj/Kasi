@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+# -*- coding: utf-8 -*-
 
 import socket
 import sys
@@ -9,8 +10,13 @@ import pickle
 
 class Client(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, host=None, port=5000):
+        # get the hostname
+        if not host:
+            self._host = socket.gethostname()
+        if not isinstance(port, int):
+            raise ValueError('Argument port has to be an integer!')
+        self._port = port
 
     @staticmethod
     def receive_all(sock):
@@ -65,8 +71,8 @@ class Client(object):
         return "Q"
 
     def Open(self):
-        host = socket.gethostname()                 # as both code is running on same pc
-        port = 5000                                 # socket server port number
+        host = self._host                           # as both code is running on same pc
+        port = self._port                           # socket server port number
         self.__client_socket = socket.socket()      # instantiate
         self.__client_socket.connect((host, port))  # connect to the server
 
@@ -76,16 +82,23 @@ class Client(object):
 
     def GetCache(self, name):
         self.Open()
-        code, value = self.send(client.MessageGet(name))
+        code, value = self.send(self.MessageGet(name))
         self.Close()
         return pickle.loads(codecs.decode(value.encode(), "base64"))
 
     def SetCache(self, name, value):
         self.Open()
         dump = codecs.encode(pickle.dumps(value), "base64").decode()
-        code, value = client.send(self.MessageSet(name, dump))
+        code, value = self.send(self.MessageSet(name, dump))
         self.Close()
         return code
+
+    def Debug(self):
+        self.Open()
+        code, value = self.send(self.MessageDebug())
+        self.Close()
+        return value.encode()
+
 
 
 if __name__ == '__main__':

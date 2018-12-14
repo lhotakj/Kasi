@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import socket
 from kasi import Client
@@ -10,8 +12,13 @@ def start_server(host=None, port=5000, connections=5):
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # get the instance
     server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-    server_socket.bind((host, port))  # bind host address and port together
-    server_socket.listen(connections)
+
+    try:
+        server_socket.bind((host, port))  # bind host address and port together
+        server_socket.listen(connections)
+    except Exception as e:
+        sys.stderr.write(str(e) + "\n")
+
 
     sys.stderr.write('Server up and running and waiting on {port} ... \n'.format(port=str(port)))
     sys.stdout.flush()
