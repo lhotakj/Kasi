@@ -14,6 +14,8 @@ class Client(object):
         # get the hostname
         if not host:
             self._host = socket.gethostname()
+        else:
+            self._host = host
         if not isinstance(port, int):
             raise ValueError('Argument port has to be an integer!')
         self._port = port
@@ -71,8 +73,6 @@ class Client(object):
         return "Q"
 
     def Open(self):
-        host = self._host                           # as both code is running on same pc
-        port = self._port                           # socket server port number
         self.__client_socket = socket.socket()      # instantiate
         self.__client_socket.connect((self._host, self._port))  # connect to the server
 
