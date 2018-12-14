@@ -15,7 +15,7 @@ jobs:
             sudo pip install pipenv
             sudo pip install --upgrade pip
             pipenv install
-            export PIPENV_SITE_PACKAGES="~/kasi/kasi"
+            export PIPENV_SITE_PACKAGES="~/kasi"
 
       - run: 
           command | 
