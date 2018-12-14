@@ -6,10 +6,10 @@
 # eg. start.sh /usr/bin/python3
 
 
-if [[ "$1" == "" ]]; then
-    echo "No interpreter supplied. Usage: 'start.sh /usr/bin/python3'"
-    exit 1
-fi
+#if [[ "$1" == "" ]]; then
+#    echo "No interpreter supplied. Usage: 'start.sh /usr/bin/python3'"
+#    exit 1
+#fi
 
 rm -f ./nohup.out
 echo "Starting server ..."
