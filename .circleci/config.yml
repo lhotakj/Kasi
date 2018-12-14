@@ -22,12 +22,12 @@ jobs:
       - run:
 #          command: pipenv run "python test/run.py"
           command: |
-           export PYTHONPATH="~/kasi/kasi"
-           export
-           pipenv run "python demo/start.py"
+           #export PYTHONPATH="~/kasi/kasi"
+           #pwd
+           pipenv run "PYTHONPATH=$HOME/kasi/kasi; python demo/start.py"
 
       - store_test_results:
-          path: test-results
+          path: test-reports
 #      - store_artifacts:
 #          path: test-results
 #          destination: tr1
