@@ -12,7 +12,8 @@ jobs:
       - run:
           command: |
             sudo pip install pipenv
-            pipenv install
+            sudo pip install --upgrade pip
+            pipenv install            
       - run: 
           command | 
             pipenv run "pip install -r requirements-dev.txt"
