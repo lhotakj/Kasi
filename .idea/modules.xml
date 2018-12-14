@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Kasi.iml" filepath="$PROJECT_DIR$/.idea/Kasi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Mamlambo/.idea/PyWenom.iml" filepath="$PROJECT_DIR$/../Mamlambo/.idea/PyWenom.iml" />
     </modules>
   </component>
 </project>
