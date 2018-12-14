@@ -12,7 +12,7 @@ if [ -z "$1" ]
     exit 1
 fi
 echo "Starting server ..."
-$1 ./start.py &
+nohup $1 ./start.py &
 
 PID=$!
 echo "Server running under PID:$PID"
