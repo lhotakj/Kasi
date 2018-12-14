@@ -7,6 +7,7 @@ jobs:
 
     steps:
       - checkout
+      - run: mkdir test-reports
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
       - run:
@@ -19,8 +20,8 @@ jobs:
             pipenv run "pip install -r requirements-dev.txt"
       - run:
           command: pipenv run "python test/run.py"
-#      - store_test_results:
-#          path: test-results
+      - store_test_results:
+          path: test-results
 #      - store_artifacts:
 #          path: test-results
 #          destination: tr1
@@ -29,7 +30,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build_and_test
+      - build_and_test:
           filters:
             branches:
               only: master
