@@ -17,8 +17,7 @@ jobs:
             #pipenv install
             export PYTHONPATH="$HOME/kasi"
             pip install -r requirements-dev.txt
-            which python
-            python test/start.sh python
+            /usr/local/bin/python test/start.sh /usr/local/bin/python
 
 #      - run: 
 #          command | 
