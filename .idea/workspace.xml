@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7681847-3207-4c12-bea4-33ba4772ff66" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/kasi/Client.py" beforeDir="false" afterPath="$PROJECT_DIR$/kasi/Client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kasi/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/kasi/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/start.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/start.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test/start.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.circleci/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.circleci/config.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,7 +12,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/start.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="224">
@@ -39,6 +35,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="168">
               <caret line="15" column="8" lean-forward="true" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.circleci/config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -75,6 +80,7 @@
         <option value="$PROJECT_DIR$/test/client.py" />
         <option value="$PROJECT_DIR$/test/start.py" />
         <option value="$PROJECT_DIR$/kasi/Client.py" />
+        <option value="$PROJECT_DIR$/.circleci/config.yml" />
       </list>
     </option>
   </component>
@@ -96,6 +102,16 @@
             <path>
               <item name="Kasi" type="b2602c69:ProjectViewProjectNode" />
               <item name="Kasi" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Kasi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Kasi" type="462c0819:PsiDirectoryNode" />
+              <item name=".circleci" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Kasi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Kasi" type="462c0819:PsiDirectoryNode" />
+              <item name="demo" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Kasi" type="b2602c69:ProjectViewProjectNode" />
@@ -229,13 +245,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kasi/Server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="15" column="8" lean-forward="true" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kasi/Client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -261,6 +270,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
           <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kasi/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="15" column="8" lean-forward="true" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.circleci/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
         </state>
       </provider>
     </entry>
