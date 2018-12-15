@@ -1,5 +1,5 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 
 from kasi import Server
 
-Server.start_server()
+Server.start_server(host='0.0.0.0', port=5000)

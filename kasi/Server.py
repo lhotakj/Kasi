@@ -47,16 +47,22 @@ def start_server(host=None, port=5000, connections=5):
             elif data.startswith("S"):
                 data = data[1:]
                 lines = data.split("\n")
-                storage.set(lines[0], lines[1])
+                name = lines[0]
+                exp = lines[1]
+                value = lines[2]
+                storage.set(name, exp, value)
                 sys.stdout.write("SET {key} \n".format(key=lines[0]))
                 sys.stdout.flush()
                 conn.send(("0\n" + data).encode())  # send data to the client
             elif data.startswith("G"):
                 data = data[1:-1]
-                sys.stdout.write("GET {key} \n".format(key=data))
+                sys.stdout.write("GET '{key}' \n".format(key=data))
                 sys.stdout.flush()
                 r = storage.get(data)
-                conn.send(("0\n" + r).encode())  # send data to the client
+                if not r:
+                    conn.send("1\n\n".encode())  # 1 - not found
+                else:
+                    conn.send(("0\n" + r).encode())  # send data to the client
             elif data.startswith("Q"):
                 conn.send(("0\n" + data).encode())  # send data to the client
                 sys.stdout.write("QUIT\n")
@@ -75,7 +81,7 @@ def start_server(host=None, port=5000, connections=5):
             exit()
 
         finally:
-            conn.close()
+            pass
 
 
 if __name__ == '__main__':

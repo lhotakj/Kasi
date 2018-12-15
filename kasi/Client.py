@@ -3,9 +3,10 @@
 
 import socket
 import sys
-import datetime
 import codecs
 import pickle
+import base64
+import datetime
 
 
 class Client(object):
@@ -19,6 +20,7 @@ class Client(object):
         if not isinstance(port, int):
             raise ValueError('Argument port has to be an integer!')
         self._port = port
+        print(self._host)
 
     @staticmethod
     def receive_all(sock):
@@ -57,8 +59,13 @@ class Client(object):
         return s[0], s[1]
 
 
-    def MessageSet(self, name, value):
-        return "S" + name + "\n" + value
+    def MessageSet(self, name, value, timedelta=None):
+        if not timedelta:
+            expiration = ""
+        else:
+            expiration = datetime.datetime.now().__add__(timedelta).timestamp()
+        print("S" + name + "\n" + str(expiration) + "\n" + value)
+        return "S" + name + "\n" + str(expiration) + "\n" + value
 
 
     def MessageGet(self, name):
@@ -81,15 +88,24 @@ class Client(object):
 
 
     def GetCache(self, name):
+        name = name.replace("\n", "").replace("\t", "")
         self.Open()
         code, value = self.send(self.MessageGet(name))
         self.Close()
-        return pickle.loads(codecs.decode(value.encode(), "base64"))
+        if code != "0":
+            return None
+        print("NAME:" + name)
+        print("CODE:" + code)
+        print("value:" + value)
+        return pickle.loads(base64.b64decode(value))
+        #return pickle.loads(codecs.decode(value.encode(), "base64"))
 
-    def SetCache(self, name, value):
+    def SetCache(self, name, value, timedelta=None):
+        name = name.replace("\n","").replace("\t","")
         self.Open()
-        dump = codecs.encode(pickle.dumps(value), "base64").decode()
-        code, value = self.send(self.MessageSet(name, dump))
+        dump = base64.b64encode(pickle.dumps(value)).decode()
+        #dump = codecs.encode(pickle.dumps(value), "base64").decode()
+        code, value = self.send(self.MessageSet(name, dump, timedelta))
         self.Close()
         return code
 
@@ -101,44 +117,5 @@ class Client(object):
 
 
 
-if __name__ == '__main__':
-
-    client = Client()
-    client.SetCache("pozdrav", ['a', 'd'])
-    client.SetCache("pozdrav5", 'AHOJ')
-
-    print("\n-------------------")
-    print(str(client.GetCache("pozdrav")))
-    print(str(client.GetCache("pozdrav5")))
-    print("\n-------------------")
-
-    start = datetime.datetime.now().timestamp()
-    for x in range(0, 1):
-        client.SetCache("ahoj"+str(x), "1")
-        client.GetCache("ahoj" + str(x))
-    end = datetime.datetime.now().timestamp()
-    sys.stdout.write("100 connections in " + str(end - start))
-
-    #client.Close()
-
-    # - NORMAL ----------------------------------
-#    start = datetime.datetime.now().timestamp()
-#    for x in range(0,100):
-#        client.send(client.MessageSet("ahoj"+str(x), "1"))
-#        client.send(client.MessageSet("hi", "2545646"))
-#        client.send(client.MessageGet("hi"))
-#    end = datetime.datetime.now().timestamp()
-
-
-
-
- #   sys.stdout.write("\n\n")
- #   sys.stdout.write("100 connections in " + str(end - start))
- #   sys.stdout.flush()
-
-
-    #@client.send(client.MessageDebug())
-    #client.send(client.MessageQuit())
-    #client.Close()
 
 
