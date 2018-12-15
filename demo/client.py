@@ -3,11 +3,16 @@
 
 from kasi import Client
 from datetime import datetime, timedelta
-import sys
+
 
 if __name__ == '__main__':
 
     client = Client.Client(host='10.0.0.108', port=5000)
+
+    client.SetCache("D1", 'domain 2 value ', domain="x")
+    print(str(client.GetCache("D1", domain="11x")))
+
+    exit(0)
 
     client.SetCache("list", ['a', 'd'], timedelta(seconds=1))
     client.SetCache("text", 'AHOJ', timedelta(hours=1))

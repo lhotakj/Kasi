@@ -11,7 +11,7 @@ import datetime
 
 class Client(object):
 
-    def __init__(self, host=None, port=5000):
+    def __init__(self, host=None, port=5000, domain="default"):
         # get the hostname
         if not host:
             self._host = socket.gethostname()
@@ -87,7 +87,7 @@ class Client(object):
         self.__client_socket.close()  # close the connection
 
 
-    def GetCache(self, name):
+    def GetCache(self, name, domain="default"):
         name = name.replace("\n", "").replace("\t", "")
         self.Open()
         code, value = self.send(self.MessageGet(name))
@@ -100,7 +100,7 @@ class Client(object):
         return pickle.loads(base64.b64decode(value))
         #return pickle.loads(codecs.decode(value.encode(), "base64"))
 
-    def SetCache(self, name, value, timedelta=None):
+    def SetCache(self, name, value, timedelta=None, domain="default"):
         name = name.replace("\n","").replace("\t","")
         self.Open()
         dump = base64.b64encode(pickle.dumps(value)).decode()

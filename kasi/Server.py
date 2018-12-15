@@ -5,7 +5,7 @@ import socket
 from kasi import Client
 from kasi import Storage
 
-def start_server(host=None, port=5000, connections=5):
+def start_server(host=None, port=5000, connections=5, domain="default"):
     # get the hostname
     if not host:
         host = 'localhost'
@@ -50,15 +50,17 @@ def start_server(host=None, port=5000, connections=5):
                 name = lines[0]
                 exp = lines[1]
                 value = lines[2]
-                storage.set(name, exp, value)
-                sys.stdout.write("SET {key} \n".format(key=lines[0]))
+                domain = "default"
+                storage.set(name, exp, value, domain)
+                sys.stdout.write("SET {domain}.{key} \n".format(key=lines[0], domain=domain))
                 sys.stdout.flush()
                 conn.send(("0\n" + data).encode())  # send data to the client
             elif data.startswith("G"):
                 data = data[1:-1]
-                sys.stdout.write("GET '{key}' \n".format(key=data))
+                sys.stdout.write("GET {domain}.{key} \n".format(key=data, domain=domain))
                 sys.stdout.flush()
-                r = storage.get(data)
+                domain = "default"
+                r = storage.get(data, domain)
                 if not r:
                     conn.send("1\n\n".encode())  # 1 - not found
                 else:
