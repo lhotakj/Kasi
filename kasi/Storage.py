@@ -7,11 +7,15 @@ class Storage(object):
         self.__data = {}  # { 'default': {"key1":[ exp1, value1]}, 'domain2': {"key1":[ exp1, value1] }
 
     def set(self, name, value, expiration=None, domain="default"):
+        try:
+            if domain not in self.__data:
+                self.__data.update({domain: {}})
+            self.__data[domain][name] = [value, expiration]
+            return "0"
+        except Exception as e:
+            return str(e)
 
-        self.__data[domain] = {name: [value, expiration]}
-        #self.__data[name] = [value, expiration]
-
-    def get(self, name, domain="default"):
+    def get(self, name, domain):
         if domain in self.__data:
             rec = self.__data[domain]
             if name in rec:
@@ -27,7 +31,33 @@ class Storage(object):
                 return rec[name][1]
         return None
 
-#        if name in self.__data:
+    def delete(self, name, domain):
+        try:
+            if domain not in self.__data:
+                return "Domain does not exists"
+            else:
+                if name not in self.__data[domain]:
+                    return "Key does not exists"
+                del self.__data[domain][name]
+                return "0"
+        except Exception as e:
+            return str(e)
+
+
+    def reset(self):
+        self.__data = {}
+        return "0"
+
+    def stats(self):
+        r = {'domains': None, 'started': 'x', 'hits': 0}
+        for domain in self.__data:
+            r.update({"domains": {}})
+            r["domains"][domain] = {'count':1}
+        return str(r)
+
+
+
+    #        if name in self.__data:
 #            # exp in self.__data[name][0]
 #            if self.__data[name][0]: # exp is set
 #                now = datetime.now().timestamp()

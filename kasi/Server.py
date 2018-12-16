@@ -4,6 +4,24 @@ import sys
 import socket
 from kasi import Client
 from kasi import Storage
+import datetime
+import os
+
+
+def log(log_type, text, noeof=False):
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
+    pid = str(os.getpid())
+    if noeof:
+        e = ""
+    else:
+        e = "\n"
+    sys.stdout.write("[{now}] [{pid}] [{log_type}] {text}{e}".format(now=now, pid=pid, log_type=log_type.upper(), text=text, e=e))
+    sys.stdout.flush()
+
+def logend(text):
+    sys.stdout.write("{text}\n".format(text=text))
+    sys.stdout.flush()
+
 
 def start_server(host=None, port=5000, connections=5, domain="default"):
     # get the hostname
@@ -12,26 +30,29 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # get the instance
     server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     try:
         server_socket.bind((host, port))  # bind host address and port together
         server_socket.listen(connections)
     except Exception as e:
-        sys.stderr.write(str(e) + "\n")
+        logme("ERROR", str(e))
+        exit(1)
 
-    sys.stdout.write('Server up and running and waiting on {host}:{port} ... \n'.format(host=host, port=str(port)))
-    sys.stdout.write('Press [Ctrl+C] to stop it.\n'.format(port=str(port)))
-    sys.stdout.flush()
+    log("INFO", 'Server "{server_name}" up and running and waiting on {host}:{port} ...'.format(host=host, port=str(port), server_name="Kasi"))
+    log("INFO", 'Press <Ctrl+C> to stop the server.')
 
     storage = Storage.Storage()
 
+    conn = None
     while True:
 
         try:
 
             conn, address = server_socket.accept()  # accept new connection
 
-            sys.stdout.write("Connection from: " + str(address) + "\n")
+            log("INFO", "Connection from: " + str(address))
+
             sys.stdout.flush()
 
             # receive data stream.
@@ -44,43 +65,78 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
 
             if data.startswith("D"):
                 conn.send(str("0\n" + str(storage.dump())).encode())  # send data to the client
+
             elif data.startswith("S"):
                 data = data[1:]
                 lines = data.split("\n")
                 name = lines[0]
-                exp = lines[1]
-                value = lines[2]
-                domain = "default"
-                storage.set(name, exp, value, domain)
-                sys.stdout.write("SET {domain}.{key} \n".format(key=lines[0], domain=domain))
-                sys.stdout.flush()
-                conn.send(("0\n" + data).encode())  # send data to the client
+                domain = lines[1]
+                exp = lines[2]
+                value = lines[3]
+                res = storage.set(name, exp, value, domain)
+                log("INFO", "SET [{domain}].[{key}] ".format(key=name, domain=domain), noeof=True)
+                if res == "0":
+                    logend("OK")
+                    rc = res
+                else:
+                    logend("ERROR: " + res)
+                    rc = res
+                conn.send((rc + "\n").encode())  # send data to the client
+
             elif data.startswith("G"):
-                data = data[1:-1]
-                sys.stdout.write("GET {domain}.{key} \n".format(key=data, domain=domain))
-                sys.stdout.flush()
-                domain = "default"
-                r = storage.get(data, domain)
+                data = data[1:]
+                lines = data.split("\n")
+                name = lines[0]
+                domain = lines[1]
+                log("INFO", "GET [{domain}].[{key}] ".format(key=name, domain=domain), noeof=True)
+                r = storage.get(name, domain)
                 if not r:
                     conn.send("1\n\n".encode())  # 1 - not found
+                    logend("ERROR: Key in given domain not found")
                 else:
                     conn.send(("0\n" + r).encode())  # send data to the client
+                    logend("OK")
+
+            elif data.startswith("X"):
+                data = data[1:]
+                lines = data.split("\n")
+                name = lines[0]
+                domain = lines[1]
+                res = storage.delete(name, domain)
+                log("INFO", "DEL [{domain}].[{key}] ".format(key=name, domain=domain), noeof=True)
+                if res == "0":
+                    logend("OK")
+                    rc = res
+                else:
+                    logend("ERROR: " + res)
+                    rc = res
+                conn.send((rc + "\n").encode())  # send data to the client
+
             elif data.startswith("Q"):
-                conn.send(("0\n" + data).encode())  # send data to the client
-                sys.stdout.write("QUIT\n")
-                sys.stdout.flush()
+                conn.send(("0\n").encode())  # send data to the client
+                log("INFO", "Shutting down server")
                 conn.close()  # close the connection
-                sys.stdout.write("Shutting down server ...\n")
-                sys.stdout.flush()
                 break
 
+            elif data.startswith("R"):
+                log("INFO", "Resetting the cache")
+                res = storage.reset()
+                conn.send(("0\n").encode())  # send data to the client
+                conn.close()  # close the connection
+
+            elif data.startswith("? "):
+                log("INFO", "Sending stats")
+                res = storage.stats()
+                conn.send(("0\n" + res).encode())  # send data to the client
+                conn.close()  # close the connection
+
         except KeyboardInterrupt:
-            sys.stdout.write("[CTRL+C detected]\n")
-            sys.stdout.flush()
-            conn.close()
-            sys.stdout.write("Shutting down server ...\n")
-            sys.stdout.flush()
-            exit()
+            log("WARN", "<CRTL+C> Detected.")
+            if conn:
+                conn.shutdown(1)
+                conn.close()
+                log("INFO", "Shutting down server")
+            exit(0)
 
         finally:
             pass
