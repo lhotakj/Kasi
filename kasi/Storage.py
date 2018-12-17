@@ -20,7 +20,7 @@ class Storage(object):
             rec = self.__data[domain]
             if name in rec:
                 # exp in self.__data[name][0]
-                if rec[name][0]: # exp is set
+                if rec[name][0]:  # exp is set
                     now = datetime.now().timestamp()
                     if now > float(rec[name][0]):
                         try:
@@ -52,7 +52,7 @@ class Storage(object):
         r = {'domains': None, 'started': 'x', 'hits': 0}
         for domain in self.__data:
             r.update({"domains": {}})
-            r["domains"][domain] = {'count':1}
+            r["domains"][domain] = {'count': 1}
         return str(r)
 
 
