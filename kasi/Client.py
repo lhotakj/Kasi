@@ -7,6 +7,8 @@ import codecs
 import pickle
 import base64
 import datetime
+import time
+import sys
 
 
 class Client(object):
@@ -21,9 +23,14 @@ class Client(object):
             raise ValueError('Argument port has to be an integer!')
         self._port = port
 
+    # Python < 3.3 compatibile
+    @staticmethod
+    def timestamp(date):
+        return time.mktime(date.timetuple())
+
     @staticmethod
     def receive_all(sock):
-        BUFF_SIZE = 4096  # 4 KiB
+        BUFF_SIZE = 512  # 4 KiB
         data = b''
         while True:
             part = sock.recv(BUFF_SIZE)
@@ -34,7 +41,7 @@ class Client(object):
         return data.decode()
 
     def recvall(self):
-        BUFF_SIZE = 4096  # 4 KiB
+        BUFF_SIZE = 512  # 4 KiB
         data = b''
         while True:
             part = self.__client_socket.recv(BUFF_SIZE)
@@ -54,7 +61,6 @@ class Client(object):
         #sys.stdout.write('Received from server: ' + data)
         #sys.stdout.write('\n---')
         s = data.split("\n")
-        sys.stdout.flush()
         return s[0], s[1]
 
 
@@ -62,7 +68,7 @@ class Client(object):
         if not timedelta:
             expiration = ""
         else:
-            expiration = datetime.datetime.now().__add__(timedelta).timestamp()
+            expiration = self.timestamp(datetime.datetime.now().__add__(timedelta))
         return "S" + name + "\n" + domain + "\n" + str(expiration) + "\n" + value
 
     def MessageGet(self, name, domain):
@@ -98,9 +104,6 @@ class Client(object):
         self.Close()
         if code != "0":
             return None
-        #print("NAME:" + name)
-        #print("CODE:" + code)
-        #print("value:" + value)
         return pickle.loads(base64.b64decode(value))
 
     def SetCache(self, name, value, timedelta=None, domain="default"):

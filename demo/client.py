@@ -5,9 +5,11 @@ from kasi import Client
 from datetime import datetime, timedelta
 
 
+
 if __name__ == '__main__':
 
-    client = Client.Client(host='10.0.0.108', port=5000)
+
+    client = Client.Client(host='localhost', port=5000)
 
     client.ResetCache()
 
