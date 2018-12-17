@@ -6,11 +6,11 @@ class Storage(object):
     def __init__(self):
         self.__data = {}  # { 'default': {"key1":[ exp1, value1]}, 'domain2': {"key1":[ exp1, value1] }
 
-    def set(self, name, value, expiration=None, domain="default"):
+    def set(self, name, value, datatype, expiration=None, domain="default"):
         try:
             if domain not in self.__data:
                 self.__data.update({domain: {}})
-            self.__data[domain][name] = [value, expiration]
+            self.__data[domain][name] = [value, datatype, expiration]
             return "0"
         except Exception as e:
             return str(e)
@@ -20,16 +20,16 @@ class Storage(object):
             rec = self.__data[domain]
             if name in rec:
                 # exp in self.__data[name][0]
-                if rec[name][0]:  # exp is set
+                if rec[name][2]:  # exp is set
                     now = datetime.now().timestamp()
-                    if now > float(rec[name][0]):
+                    if now > float(rec[name][2]):
                         try:
                             del rec.remove[name]  # remove from cache
                         except Exception as e:
                             pass
-                        return None
-                return rec[name][1]
-        return None
+                        return None, None
+                return rec[name][0], rec[name][1] #tuple (value, datatype)
+        return None, None
 
     def delete(self, name, domain):
         try:

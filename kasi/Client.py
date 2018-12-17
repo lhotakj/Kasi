@@ -96,20 +96,32 @@ class Client(object):
     def Close(self):
         self.__client_socket.close()  # close the connection
 
-
     def GetCache(self, name, domain="default"):
         name = name.replace("\n", "").replace("\t", "")
         self.Open()
         code, value = self.send(self.MessageGet(name, domain))
         self.Close()
+        datatype = value[:1]
+        value = value[2:]
         if code != "0":
             return None
-        return pickle.loads(base64.b64decode(value))
+        if datatype == "s":
+            return value
+        else:
+            return pickle.loads(base64.b64decode(value))
 
     def SetCache(self, name, value, timedelta=None, domain="default"):
         name = name.replace("\n", "").replace("\t", "")
+
+        if type(value) is str:
+            name = "s" + name
+            dump = value
+        else:
+            name = "x" + name
+            dump = base64.b64encode(pickle.dumps(value)).decode()
+
         self.Open()
-        dump = base64.b64encode(pickle.dumps(value)).decode()
+        # dump = base64.b64encode(pickle.dumps(value)).decode()
         code, value = self.send(self.MessageSet(name, dump, domain, timedelta))
         self.Close()
         return code

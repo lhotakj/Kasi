@@ -64,18 +64,19 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
 
 
             if data.startswith("S"):
-
                 lines = data.split("\n")
                 #lines = re.split(r'[\n]+', data)
 
                 name = lines[0]
                 name = name[1:]
+                datatype = name[0]
+                name = name[1:]
                 domain = lines[1]
                 exp = lines[2]
                 value = lines[3]
-                res = storage.set(name, exp, value, domain)
+                res = storage.set(name, value, datatype, exp, domain)
                 if not _performance_mode:
-                    log("INFO", "SET [{domain}].[{key}] ".format(key=name, domain=domain), noeof=True)
+                    log("INFO", "SET [{domain}].[{key}] type {datatype} ".format(key=name, domain=domain, datatype=datatype), noeof=True)
                 if res == "0":
                     if not _performance_mode:
                         logend("OK")
@@ -88,7 +89,6 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
 
             elif data.startswith("G"):
                 data = data[1:]
-
                 lines = data.split("\n")
                 #lines = re.split(r'[\n]+', data)
 
@@ -96,13 +96,13 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
                 domain = lines[1]
                 if not _performance_mode:
                     log("INFO", "GET [{domain}].[{key}] ".format(key=name, domain=domain), noeof=True)
-                r = storage.get(name, domain)
+                r, datatype = storage.get(name, domain)
                 if not r:
                     conn.send("1\n\n".encode())  # 1 - not found
                     if not _performance_mode:
                         logend("ERROR: Key in given domain not found")
                 else:
-                    conn.send(("0\n" + r).encode())  # send data to the client
+                    conn.send(("0\n" + datatype + "\n" + r).encode())  # send data to the client
                     if not _performance_mode:
                         logend("OK")
 
