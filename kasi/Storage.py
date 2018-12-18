@@ -48,14 +48,11 @@ class Storage(object):
         self.__data = {}
         return "0"
 
-    def stats(self):
-        r = {'domains': None, 'started': 'x', 'hits': 0}
+    def stats(self, started, set_hit, get_hit, get_miss):
+        r = {'domains': {}, 'started': started, 'set_hit': set_hit, 'get_hit': set_hit, 'get_miss': get_miss}
         for domain in self.__data:
-            r.update({"domains": {}})
-            r["domains"][domain] = {'count': 1}
+            r["domains"][domain] = {'keys': len(self.__data[domain])}
         return str(r)
-
-
 
     #        if name in self.__data:
 #            # exp in self.__data[name][0]

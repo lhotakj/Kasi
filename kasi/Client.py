@@ -30,7 +30,7 @@ class Client(object):
 
     @staticmethod
     def receive_all(sock):
-        BUFF_SIZE = 512  # 4 KiB
+        BUFF_SIZE = 1024  # 4 KiB
         data = b''
         while True:
             part = sock.recv(BUFF_SIZE)
@@ -41,7 +41,7 @@ class Client(object):
         return data.decode()
 
     def recvall(self):
-        BUFF_SIZE = 512  # 4 KiB
+        BUFF_SIZE = 1024  # 4 KiB
         data = b''
         while True:
             part = self.__client_socket.recv(BUFF_SIZE)
@@ -53,15 +53,14 @@ class Client(object):
 
 
     def send(self, message):
-        #sys.stdout.write('Sending message : ' + message)
-        #sys.stdout.write('\n---')
-        #sys.stdout.flush()
         self.__client_socket.send(message.encode())  # send message
         data = self.recvall()
-        #sys.stdout.write('Received from server: ' + data)
-        #sys.stdout.write('\n---')
         s = data.split("\n")
         return s[0], s[1]
+
+    def send_fast(self, message):
+        self.__client_socket.send(message.encode())  # send message
+        return self.recvall()
 
 
     def MessageSet(self, name, value, domain, timedelta=None):
@@ -96,13 +95,14 @@ class Client(object):
     def Close(self):
         self.__client_socket.close()  # close the connection
 
-    def GetCache(self, name, domain="default"):
-        name = name.replace("\n", "").replace("\t", "")
+    def get(self, name, domain="default"):
+        #"0\ns\nXXXXXXXXXXXX"
         self.Open()
-        code, value = self.send(self.MessageGet(name, domain))
+        msg = self.send_fast(self.MessageGet(name, domain))
         self.Close()
-        datatype = value[:1]
-        value = value[2:]
+        code = msg[0]
+        datatype = msg[2]
+        value = msg[4:]
         if code != "0":
             return None
         if datatype == "s":
@@ -110,8 +110,8 @@ class Client(object):
         else:
             return pickle.loads(base64.b64decode(value))
 
-    def SetCache(self, name, value, timedelta=None, domain="default"):
-        name = name.replace("\n", "").replace("\t", "")
+    def set(self, name, value, timedelta=None, domain="default"):
+        #name = name.replace("\n", "").replace("\t", "")
 
         if type(value) is str:
             name = "s" + name
@@ -126,14 +126,14 @@ class Client(object):
         self.Close()
         return code
 
-    def DeleteCache(self, name, domain="default"):
+    def delete(self, name, domain="default"):
         name = name.replace("\n", "").replace("\t", "")
         self.Open()
         code, value = self.send(self.MessageDelete(name, domain))
         self.Close()
         return code
 
-    def ResetCache(self):
+    def reset(self):
         self.Open()
         code, value = self.send(self.MessageReset())
         self.Close()
@@ -145,7 +145,7 @@ class Client(object):
         self.Close()
         return value.encode()
 
-    def Stats(self):
+    def stats(self):
         self.Open()
         code, value = self.send(self.MessageStats())
         self.Close()
