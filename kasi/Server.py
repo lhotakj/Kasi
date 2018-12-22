@@ -7,8 +7,9 @@ from kasi import Storage
 import datetime
 import os
 import re
+import logging
 
-_performance_mode = True
+_performance_mode = False
 _stats_mode       = True
 _stats_started    = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
 _stats_get_hit = 0
@@ -39,6 +40,43 @@ def receive_all(conn):
             # either 0 or end of data
             break
     return data.decode()
+
+
+# https://franklingu.github.io/programming/2016/03/01/creating-daemon-process-python-example-explanation/
+#TODO: implement deamonize + refactor server call
+def start_server_daemon(host=None, port=5000, connections=5, domain="default"):
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # exit first parent
+            sys.exit(0)
+    except OSError as err:
+        sys.stderr.write('_Fork #1 failed: {0}\n'.format(err))
+        sys.exit(1)
+    # decouple from parent environment
+    os.chdir('/')
+    os.setsid()
+    os.umask(0)
+    # do second fork
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # exit from second parent
+            sys.exit(0)
+    except OSError as err:
+        sys.stderr.write('_Fork #2 failed: {0}\n'.format(err))
+        sys.exit(1)
+    # redirect standard file descriptors
+    sys.stdout.flush()
+    sys.stderr.flush()
+    si = open(os.devnull, 'r')
+    so = open(os.devnull, 'w')
+    se = open(os.devnull, 'w')
+    os.dup2(si.fileno(), sys.stdin.fileno())
+    os.dup2(so.fileno(), sys.stdout.fileno())
+    os.dup2(se.fileno(), sys.stderr.fileno())
+    print('eeeeae')
+
 
 def start_server(host=None, port=5000, connections=5, domain="default"):
     global _performance_mode
@@ -147,6 +185,7 @@ def start_server(host=None, port=5000, connections=5, domain="default"):
                 conn.send(("0\n").encode())  # send data to the client
                 if not _performance_mode:
                     log("INFO", "Shutting down server")
+                conn.shutdown(1)
                 conn.close()  # close the connection
                 break
 

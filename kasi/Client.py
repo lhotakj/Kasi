@@ -82,7 +82,7 @@ class Client(object):
     def MessageReset(self):
         return "R "
 
-    def MessageQuit(self):
+    def MessageShutdown(self):
         return "Q"
 
     def MessageStats(self):
@@ -136,6 +136,12 @@ class Client(object):
     def reset(self):
         self.Open()
         code, value = self.send(self.MessageReset())
+        self.Close()
+        return code
+
+    def shutdown(self):
+        self.Open()
+        code, value = self.send(self.MessageShutdown())
         self.Close()
         return code
 
