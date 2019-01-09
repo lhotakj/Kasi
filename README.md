@@ -61,4 +61,4 @@ client.shutdown()
 See folder [demo](https://github.com/lhotakj/Kasi/tree/master/demo) to run this code. You can also try `performance.py` to see the difference between `Kasi` and `redis`.
 
 [![CircleCI](https://circleci.com/gh/lhotakj/Kasi/tree/master.svg?style=svg&circle-token=3b00590f1211a956d5ab9d210c0ff59ea10b19d7)](https://circleci.com/gh/lhotakj/Kasi/tree/master)
- [![Known Vulnerabilities](https://snyk.io/test/github/lhotakj/Kasi/badge.svg)](https://snyk.io/test/github/lhotakj/Kasi) 
+ [![Known Vulnerabilities](https://snyk.io/test/github/lhotakj/Kasi/badge.svg)](https://snyk.io/test/github/lhotakj/Kasi/) 
