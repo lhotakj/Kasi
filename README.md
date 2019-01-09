@@ -1,5 +1,5 @@
 # Kasi
-Kasi means is Shona language "speed". It's a *cache server* implementation similar to `redis`. I decided to write this code to serve a simple caching server to help me to store persisent data such as sessions for a python web server. The intention is not to compete `redis` or `memcached`, but to provide a lightweight solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is noticeable only when executing hundreds of thousands requests; the performance should be sufficient for basic use cases.
+Kasi means is Shona language "speed" and it's a *cache server* implementation similar to `redis`. I wrote this code to serve a simple caching server to help me to store persisent data such as sessions for a python web server. The intention is not to compete `redis` or `memcached`, but to provide a lightweight solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is noticeable only when executing hundreds of thousands requests; the performance should be sufficient for basic use cases.
 
 The cache server supports storing of any type of object, it's not limited to `str` like `redis`. There's build-in algortithm to perform operation with strings much faster.
 
