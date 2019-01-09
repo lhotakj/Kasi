@@ -1,7 +1,7 @@
 # Kasi
-Easy cache server similar to `redis`. I wrote this code to have a simple caching server which would help me to store persisent data such as session etc. for a web server. It's intention is not to compete `redis` or `memcached` but to provide a simple and easy solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is visible when running tests of hundreds of thousands requests, for basic usage the performance should be sufficient. 
+Easy cache server similar to `redis`. I decided to write this code to serve a simple caching server to help me to store persisent data such as sessions for a web server. The intention is not to compete `redis` or `memcached` but to provide a simple and easy solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is noticeable only when executing hundreds of thousands requests; for the basic use cases the performance should be sufficient.
 
-The cache server supports storing of any type of object, it's not limited to `str` as `redis`. There's build-in algortithm to perform operation with strings much faster.
+The cache server supports storing of any type of object, it's not limited to `str` like `redis`. There's build-in algortithm to perform operation with strings much faster.
 
 The server can host multiple so called domains (like db in `redis`). If not specificed, the default domain `default` is be used.
 
