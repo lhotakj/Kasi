@@ -14,6 +14,7 @@ Basic methods of the client are as follows:
 
 # Requirements
 * Python 3.6+ (Python 2 support is currently ongoing)
+* 3pp dependencies
 
 ## Demo
 ### Server
