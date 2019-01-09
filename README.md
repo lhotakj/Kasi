@@ -1,11 +1,9 @@
 # Kasi
-Kasi means is Shona language "speed". It's a *cache server* implementation similar to `redis`. I decided to write this code to serve a simple caching server to help me to store persisent data such as sessions for a web server. The intention is not to compete `redis` or `memcached` but to provide a simple and easy solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is noticeable only when executing hundreds of thousands requests; for the basic use cases the performance should be sufficient.
+Kasi means is Shona language "speed". It's a *cache server* implementation similar to `redis`. I decided to write this code to serve a simple caching server to help me to store persisent data such as sessions for a python web server. The intention is not to compete `redis` or `memcached`, but to provide a lightweight solution for cases where you can't install software. When running complex tests, `Kasi` is about 2-3x slower than `redis`, the difference is noticeable only when executing hundreds of thousands requests; the performance should be sufficient for basic use cases.
 
 The cache server supports storing of any type of object, it's not limited to `str` like `redis`. There's build-in algortithm to perform operation with strings much faster.
 
-
-
-The server can host multiple so called domains (like db in `redis`). If not specificed, the default domain `default` is be used.
+The server can host multiple so called domains (like db in `redis`). If not specificed, the default domain `default` is be used. Deamon mode is not available yet, coming soon :)
 
 Basic methods of the client are as follows:
 * `.set(name, value, timedelta=None, domain="default")` - stores a key with `name` and `value` with expiration `timedelta` in domain `domain`. Value can be any Python object.
@@ -17,15 +15,14 @@ Basic methods of the client are as follows:
 ## Demo
 
 ### Server
-Start Kasi server bound to `0.0.0.0` in one console
+Start `Kasi` server bound to `0.0.0.0` in one console
 ```
 from kasi import Server
 Server.start_server(host='0.0.0.0', port=5000)
 ```
-*TODO* - daemonize is under progress, coming soon
 
 ### Client
-Run this code in another console. 
+and run this code in another console. 
 ```
 from kasi import Client
 from datetime import datetime, timedelta
