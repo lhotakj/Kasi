@@ -12,8 +12,10 @@ Basic methods of the client are as follows:
 * `.reset()` - resets server. Note all domains got purged. *TODO* optional parameter `domain`
 * `.shutdown()` - shutdowns server. In case you want take control over the process.
 
-## Demo
+# Requirements
+* Python 3.6+ (Python 2 support is currently ongoing)
 
+## Demo
 ### Server
 Start `Kasi` server bound to `0.0.0.0` in one console
 ```
@@ -56,6 +58,6 @@ You may shutdown the server by calling. Some more security checks may be impleme
 ```
 client.shutdown() 
 ```
-See folder demo to run this code. You can also try `performance.py` to see the difference between `Kasi` and `redis`
+See folder [demo](https://github.com/lhotakj/Kasi/tree/master/demo) to run this code. You can also try `performance.py` to see the difference between `Kasi` and `redis`.
 
 [![CircleCI](https://circleci.com/gh/lhotakj/Kasi/tree/master.svg?style=svg&circle-token=3b00590f1211a956d5ab9d210c0ff59ea10b19d7)](https://circleci.com/gh/lhotakj/Kasi/tree/master)
