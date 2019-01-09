@@ -3,15 +3,19 @@ Easy cache server similar to `redis`. I wrote this code to have a simple caching
 
 The server supports storing any object, it's not limited to `str` as `redis`. There's build-in algortithm to perform operation with strings much faster.
 
+The server can host multiple so called domains (like db in `redis`). If not specificed, the default domain `default` will be used.
+
 Basic methods of the client are as follows:
-* `.get()`
-* `.set()`
+* `.set(name, value, timedelta=None, domain="default")` - stores a key with `name` and `value` with expiration `timedelta` in domain `domain`. Value can be any Python object.
+* `.get(name, domain="default")` - gets the value of key `name`. If the `key` doesn't exists or has expired, returns `None`
+* `.delete()` 
+* `.reset()`
 * `.shutdown()`
 
 ## How to use
 
 ### Server
-Start Kasi server bound to `0.0.0.0` in one consoled
+Start Kasi server bound to `0.0.0.0` in one console
 ```
 from kasi import Server
 Server.start_server(host='0.0.0.0', port=5000)
