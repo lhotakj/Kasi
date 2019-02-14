@@ -1,5 +1,5 @@
 import setuptools
-
+ 
 from kasi import __version__
 
 with open("README.md", "r") as fh:
