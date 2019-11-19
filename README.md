@@ -63,3 +63,15 @@ See folder [demo](https://github.com/lhotakj/Kasi/tree/master/demo) to run this 
 
 [![CircleCI](https://circleci.com/gh/lhotakj/Kasi/tree/master.svg?style=svg&circle-token=3b00590f1211a956d5ab9d210c0ff59ea10b19d7)](https://circleci.com/gh/lhotakj/Kasi/tree/master)
  [![Known Vulnerabilities](https://snyk.io/test/github/lhotakj/Kasi/badge.svg)](https://snyk.io/test/github/lhotakj/Kasi/) 
+
+## Running server in docker container
+
+In project directory run the following command:
+```bash
+docker build -t example/kasi:1.0 .
+```
+
+Then run the server ina an ephemeral container:
+```bash
+docker run -it --rm -p 5000:5000 example/kasi:1.0
+```
